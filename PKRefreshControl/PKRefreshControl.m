@@ -42,13 +42,13 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
         [scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
         [scrollView addObserver:self forKeyPath:@"contentInset" options:NSKeyValueObservingOptionNew context:nil];
         
-        if ([scrollView isKindOfClass:[UICollectionView class]]) {
-            UICollectionView *collectionView = (UICollectionView *)scrollView;
-            collectionView.backgroundView = self;
-        }
-        else {
+//        if ([scrollView isKindOfClass:[UICollectionView class]]) {
+//            UICollectionView *collectionView = (UICollectionView *)scrollView;
+//            collectionView.backgroundView = self;
+//        }
+//        else {
             [scrollView insertSubview:self atIndex:0];
-        }
+//        }
         
         self.ignoreInset = NO;
         self.ignoreOffset = NO;
@@ -88,7 +88,7 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
             self.originalContentInset = [[change objectForKey:@"new"] UIEdgeInsetsValue];
             self.frame = CGRectMake(0, -(self.scrollView.contentInset.top), self.scrollView.frame.size.width, self.viewHeight);
         }
-        if (self.pkState == PKRefreshControlStateEnd && CGRectGetMinY(self.frame) > -1) {
+        if (self.pkState == PKRefreshControlStateEnd) {// && CGRectGetMinY(self.frame) > -1) {
             self.pkState = PKRefreshControlStateNone;
         }
         return;

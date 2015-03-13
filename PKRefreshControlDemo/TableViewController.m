@@ -34,6 +34,8 @@
     self.pkRefreshControl = [[PKRefreshControl alloc] initInScrollView:self.tableView];
 //    self.pkRefreshControl = [[MyRefreshControl alloc] initInScrollView:self.tableView];
     [self.pkRefreshControl addTarget:self action:@selector(onRefresh:) forControlEvents:UIControlEventValueChanged];
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0);
 }
 
 - (void)viewDidAppear:(BOOL)animated {

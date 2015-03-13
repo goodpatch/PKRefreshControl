@@ -29,6 +29,8 @@
     // Do any additional setup after loading the view.
     self.pkRefreshControl = [[PKRefreshControl alloc] initInScrollView:self.collectionView];
     [self.pkRefreshControl addTarget:self action:@selector(onRefresh:) forControlEvents:UIControlEventValueChanged];
+    
+    self.collectionView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
