@@ -28,6 +28,7 @@
 }
 
 - (void)startRefreshingAnimation {
+    [self pullAnimationWithPercentage:1];
     [self.indicator startAnimating];
     
     [UIView animateWithDuration:2.0 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
