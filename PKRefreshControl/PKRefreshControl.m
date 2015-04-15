@@ -29,10 +29,11 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
 @implementation PKRefreshControl
 
 - (id)initInScrollView:(UIScrollView *)scrollView threshold:(CGFloat)threshold {
-    self = [super initWithFrame:CGRectMake(0, -scrollView.contentInset.top, CGRectGetWidth(scrollView.bounds), threshold)];
+    self = [super initWithFrame:CGRectMake(0, scrollView.contentInset.top, CGRectGetWidth(scrollView.bounds), threshold)];
     if (self) {
         self.scrollView = scrollView;
 
+        [scrollView addObserver:self forKeyPath:@"contentInset" options:NSKeyValueObservingOptionNew context:nil];
         [scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
         [scrollView addObserver:self forKeyPath:@"pan.state" options:NSKeyValueObservingOptionNew context:nil];
         [scrollView addSubview:self];
@@ -51,6 +52,7 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
 }
 
 - (void)dealloc {
+    [self.scrollView removeObserver:self forKeyPath:@"contentInset"];
     [self.scrollView removeObserver:self forKeyPath:@"contentOffset"];
     [self.scrollView removeObserver:self forKeyPath:@"pan.state"];
 }
@@ -58,6 +60,7 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
 - (void)willMoveToSuperview:(UIView *)newSuperview {
     [super willMoveToSuperview:newSuperview];
     if (!newSuperview) {
+        [self.scrollView removeObserver:self forKeyPath:@"contentInset"];
         [self.scrollView removeObserver:self forKeyPath:@"contentOffset"];
         [self.scrollView removeObserver:self forKeyPath:@"pan.state"];
     }
@@ -65,7 +68,10 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:@"contentOffset"]) {
+    if ([keyPath isEqualToString:@"contentInset"]) {
+        [self observeValueForContentInset:[[change objectForKey:@"new"] UIEdgeInsetsValue]];
+    }
+    else if ([keyPath isEqualToString:@"contentOffset"]) {
         [self observeValueForContentOffset:[[change objectForKey:@"new"] CGPointValue]];
     }
     else if ([keyPath isEqualToString:@"pan.state"]) {
@@ -89,9 +95,11 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
 }
 
 - (void)observeValueForContentInset:(UIEdgeInsets)insets {
-    CGRect frame = self.frame;
-    frame.origin.y = -insets.top;
-    self.frame = frame;
+    if (self.pkState == PKRefreshControlStateNone) {
+        CGRect frame = self.frame;
+        frame.origin.y = insets.top;
+        self.frame = frame;
+    }
 }
 
 - (void)observeValueForContentOffset:(CGPoint)point {
