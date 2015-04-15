@@ -67,7 +67,7 @@ static NSString * const PKActivityIndicatorAnimationKey = @"PKActivityIndicatorA
 {
     // Update marker
     [self.marker setBounds:CGRectMake(0.0f, 0.0f, _barWidth, _barHeight)]; // size of the rectangle marker
-    [self.marker setCornerRadius:_barWidth * 0.5];
+    [self.marker setCornerRadius:_barWidth/2];
     [self.marker setBackgroundColor:[_barColor CGColor]];
     [self.marker setPosition:CGPointMake(self.hudSize * 0.5f, self.hudSize * 0.5f + _aperture)];
     
@@ -112,9 +112,9 @@ static NSString * const PKActivityIndicatorAnimationKey = @"PKActivityIndicatorA
 }
 
 - (void)setSpinnerReplicatorInstanceCountWithPercentage:(CGFloat)percentage {
-    CGFloat l = 0.2;
+    CGFloat l = 0.4;
     self.marker.opacity = MIN(1,percentage/l);
-    NSInteger count = MAX(0,(percentage-l)/0.8) * PKActivityIndicatorInstanceMaxCount;
+    NSInteger count = MAX(0,percentage) * PKActivityIndicatorInstanceMaxCount;
     self.spinnerReplicator.instanceCount = count;
 }
 

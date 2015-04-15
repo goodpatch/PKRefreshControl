@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface PKRefreshControl : UIControl
-- (id)initInScrollView:(UIScrollView *)scrollView openedHeight:(CGFloat)openedHeight;
+- (id)initInScrollView:(UIScrollView *)scrollView threshold:(CGFloat)threshold;
 - (id)initInScrollView:(UIScrollView *)scrollView;
 - (void)beginRefreshing;
 - (void)endRefreshing;

@@ -7,51 +7,46 @@
 //
 
 #import "MyRefreshControl.h"
+#import "PKActivityIndicator.h"
 
 @interface MyRefreshControl ()
-@property (nonatomic) CGFloat openedHeight;
-
-@property (nonatomic) CAShapeLayer *shapeLayer;
+@property (nonatomic) CGFloat threshold;
+@property (nonatomic) PKActivityIndicator *indicator;
 @end
 
 @implementation MyRefreshControl
 
-- (void)pullAnimationWithPercentage:(CGFloat)percentage
-{
-    if (!self.shapeLayer) {
-        self.shapeLayer = [CAShapeLayer layer];
-        UIBezierPath *circlePath = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, 40, 40)];
-        self.shapeLayer.path = circlePath.CGPath;
-        
-        self.shapeLayer.strokeColor = [UIColor clearColor].CGColor;
-        self.shapeLayer.fillColor = [UIColor blueColor].CGColor;
-        
-        [self.layer addSublayer:self.shapeLayer];
-    }
+- (void)initialize {
+    self.indicator = [[PKActivityIndicator alloc] initWithFrame:CGRectMake(0, 0, self.threshold, self.threshold)];
+    self.indicator.center = CGPointMake(self.center.x, self.threshold/2);
+    [self addSubview:self.indicator];
+}
+
+- (void)pullAnimationWithPercentage:(CGFloat)percentage {
+    self.indicator.alpha = 1;
+    [self.indicator setSpinnerReplicatorInstanceCountWithPercentage:percentage];
+}
+
+- (void)startRefreshingAnimation {
+    [self.indicator startAnimating];
     
-    self.shapeLayer.opacity = 1;
-    self.shapeLayer.transform = CATransform3DScale(CATransform3DIdentity, percentage, percentage, 1.0f);
+    [UIView animateWithDuration:2.0 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.indicator.transform = CGAffineTransformRotate(self.indicator.transform, M_PI);
+    } completion:^(BOOL finished) {
+        
+    }];
 }
 
-- (void)startRefreshingAnimation
-{
-    [self.shapeLayer removeAllAnimations];
-    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-    animation.duration = 1.5;
-    animation.repeatCount = HUGE_VALF;
-    NSMutableArray *values = @[@1, @1.2, @1].mutableCopy;
-    animation.values = values;
-    [self.shapeLayer addAnimation:animation forKey:@"popAnimation"];
-}
-
-- (void)endRefreshingAnimation
-{
-    [self.shapeLayer removeAllAnimations];
+- (void)endRefreshingAnimation {
     [UIView animateWithDuration:.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.shapeLayer.transform = CATransform3DScale(CATransform3DIdentity, .1, .1, 1.0f);
-        self.shapeLayer.opacity = 0;
-    } completion:nil];
+        CGAffineTransform transform = CGAffineTransformRotate(self.indicator.transform, M_PI);
+        self.indicator.transform = CGAffineTransformScale(transform, 0.1, 0.1);
+        self.indicator.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self.indicator stopAnimating];
+        [self.indicator setSpinnerReplicatorInstanceCountWithPercentage:0];
+        self.indicator.transform = CGAffineTransformIdentity;
+    }];
 }
 
 @end
