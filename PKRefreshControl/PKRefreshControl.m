@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
     self = [super initWithFrame:CGRectMake(0, scrollView.contentInset.top, CGRectGetWidth(scrollView.bounds), threshold)];
     if (self) {
         self.scrollView = scrollView;
-
+        
         [scrollView addObserver:self forKeyPath:@"contentInset" options:NSKeyValueObservingOptionNew context:nil];
         [scrollView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
         [scrollView addObserver:self forKeyPath:@"pan.state" options:NSKeyValueObservingOptionNew context:nil];
@@ -41,6 +41,7 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
         self.pkState = PKRefreshControlStateNone;
         self.threshold = threshold;
         self.userInteractionEnabled = NO;
+        self.originalContentInset = scrollView.contentInset;
         
         [self initialize];
     }
@@ -96,6 +97,7 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
 
 - (void)observeValueForContentInset:(UIEdgeInsets)insets {
     if (self.pkState == PKRefreshControlStateNone) {
+        self.originalContentInset = insets;
         CGRect frame = self.frame;
         frame.origin.y = insets.top;
         self.frame = frame;
@@ -111,6 +113,7 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
     
     switch (self.pkState) {
         case PKRefreshControlStateNone: {
+            if (!self.scrollView.isDragging) break;
             if (offset > 0) offset = 0;
             CGFloat distance = MIN(self.threshold, fabs(offset));
             CGFloat percentage = (distance / self.threshold);
@@ -173,7 +176,7 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
 
 - (void)endBehavior {
     self.pkState = PKRefreshControlStateEnd;
-
+    
     [UIView animateWithDuration:.5 delay:0 usingSpringWithDamping:1.0 initialSpringVelocity:.6 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.scrollView.contentInset = self.originalContentInset;
     } completion:nil];
