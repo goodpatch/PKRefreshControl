@@ -67,6 +67,11 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
     }
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.bounds = CGRectMake(0, 0, CGRectGetWidth(self.scrollView.bounds), self.threshold);
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"contentInset"]) {
@@ -113,7 +118,6 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
     
     switch (self.pkState) {
         case PKRefreshControlStateNone: {
-            if (!self.scrollView.isDragging) break;
             if (offset > 0) offset = 0;
             CGFloat distance = MIN(self.threshold, fabs(offset));
             CGFloat percentage = (distance / self.threshold);

@@ -10,7 +10,6 @@
 #import "PKActivityIndicator.h"
 
 @interface MyRefreshControl ()
-@property (nonatomic) CGFloat threshold;
 @property (nonatomic) PKActivityIndicator *indicator;
 @end
 

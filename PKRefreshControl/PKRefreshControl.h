@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface PKRefreshControl : UIControl
+@property (nonatomic,readonly) CGFloat threshold;
 - (id)initInScrollView:(UIScrollView *)scrollView threshold:(CGFloat)threshold;
 - (id)initInScrollView:(UIScrollView *)scrollView;
 - (void)beginRefreshing;
