@@ -93,7 +93,6 @@ static NSString * const PKActivityIndicatorAnimationKey = @"PKActivityIndicatorA
 #pragma mark - public methods
 
 - (void)startAnimating {
-    self.marker.opacity = 1.0;
     [self.fadeAnimation setDuration:PKActivityIndicatorDefaultSpeed];
     CGFloat markerAnimationDuration = PKActivityIndicatorDefaultSpeed / self.numberOfBars;
     [self.spinnerReplicator setInstanceDelay:markerAnimationDuration];
