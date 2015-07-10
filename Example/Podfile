@@ -1,0 +1,12 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+target 'PKRefreshControl_Example', :exclusive => true do
+  pod "PKRefreshControl", :path => "../"
+  pod "PKActivityIndicator"
+end
+
+target 'PKRefreshControl_Tests', :exclusive => true do
+  pod "PKRefreshControl", :path => "../"
+  pod "PKActivityIndicator"
+end
