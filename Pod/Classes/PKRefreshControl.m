@@ -213,9 +213,7 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
     
     [UIView animateWithDuration:.5 delay:0 usingSpringWithDamping:1.0 initialSpringVelocity:.6 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.scrollView.contentInset = self.originalContentInset;
-    } completion:^(BOOL finished) {
-        [self completedRefreshing];
-    }];
+    } completion:nil];
     
     [self endRefreshingAnimation];
 }
@@ -232,9 +230,6 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
 }
 
 - (void)endRefreshingAnimation {
-}
-
-- (void)completedRefreshing {
 }
 
 @end
