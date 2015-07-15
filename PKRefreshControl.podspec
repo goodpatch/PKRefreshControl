@@ -9,10 +9,10 @@
 
 Pod::Spec.new do |s|
   s.name             = "PKRefreshControl"
-  s.version          = "0.1.0"
+  s.version          = "0.1.1"
   s.summary          = "Customizable refresh control."
   s.description      = <<-DESC
-  You can replace own pulling(appearing) animation, loading animation, disappearing animation.
+  You can replace pulling(appearing) animation, loading animation, disappearing animation.
                        DESC
   s.homepage         = "https://github.com/goodpatch/PKRefreshControl"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"

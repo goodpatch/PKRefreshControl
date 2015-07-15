@@ -72,6 +72,7 @@ typedef NS_ENUM(NSUInteger, PKRefreshControlState) {
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.bounds = CGRectMake(0, 0, CGRectGetWidth(self.scrollView.bounds), self.threshold);
+    [self.scrollView insertSubview:self atIndex:0];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
